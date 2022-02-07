@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bistro Babushka</title>
+    <title>Persongalleri</title>
 
     <style>
-      section {
+      main {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       }
@@ -19,82 +19,99 @@
         padding: 10px;
         margin: 10px;
       }
+
+      .valgt {
+        background-color: cyan;
+      }
     </style>
   </head>
   <body>
     <header>
-      <nav>
-        <ul>
-          <li><a href="">Alle</a></li>
-          <li><a href="">Forretter</a></li>
-          <li><a href="">Hovedretter</a></li>
-          <li><a href="">Desserter</a></li>
-        </ul>
-      </nav>
+      <h1>Alle</h1>
     </header>
-    <h1>Bistro Babushka</h1>
-    <section>
-      <template>
-        <article>
-          <img src="" alt="" />
-          <h2></h2>
-          <h3></h3>
 
-          <p></p>
-        </article>
-      </template>
-    </section>
+    <nav>
+      <button data-kategori="alle" class="valgt">Alle</button>
+      <button data-kategori="forretter">Forretter</button>
+      <button data-kategori="hovedretter">Hovedretter</button>
+      <button data-kategori="desserter">Desserter</button>
+      <button data-kategori="sideorders">Sideorders</button>
+      <button data-kategori="drikkevarer">Drikkevarer</button>
+    </nav>
+    <main>
+      <section>
+        <template>
+          <article>
+            <img src="" alt="" />
+            <h2 class="navn"></h2>
+            <h3 class="pris"></h3>
+            <p class="text"></p>
+          </article>
+        </template>
+      </section>
+    </main>
+
     <script>
-        const container = document.querySelector("section");
-        const temp = document.querySelector("template");
+      const header = document.querySelector("header h1");
+      const container = document.querySelector("section");
+      const temp = document.querySelector("template");
 
-        const url = "https://babushka-dd8a.restdb.io/rest/menu";
-        const key = "600ec2fb1346a1524ff12de4";
+      const url = "https://babushka-dd8a.restdb.io/rest/menu";
+      const key = "600ec2fb1346a1524ff12de4";
 
-        let data = [];
+      let retter;
+      let filter = "alle";
+      const filterknapper = document.querySelectorAll("nav button");
 
-        const options = {
-          headers: {
-            "x-apikey": key,
-          },
-        };
+      const myHeaders = {
+        headers: {
+          "x-apikey": key,
+        },
+      };
 
-        document.addEventListener("DOMContentLoaded", start);
+      document.addEventListener("DOMContentLoaded", start);
+
+      //første funktion der kaldes efter dom er loaded
 
       function start() {
-          async function hentdata() {
-          const respons = await fetch(url, options);
-          const json = await respons.json();
-          vis(json);
-          console.log("her er json");
-        }
+        filterknapper.forEach((knap) => {
+          knap.addEventListener("click", setFilter);
+        });
+        hentData();
       }
 
+      function setFilter() {
+        filter = this.dataset.kategori;
+        document.querySelector(".valgt").classList.remove("valgt"); //fjern klassen valgt fra knappen
+        this.classList.add("valgt"); //Marker den knap der klikkes på med klassen valgt
+        vis();
+        header.textContent = this.textContent;
+      }
 
+      async function hentData() {
+        const JSONData = await fetch(url, myHeaders);
+        retter = await JSONData.json();
+        console.log(retter);
+        vis();
+      }
 
-        function vis(menu) {
-          menu.forEach((ret) => {
-      //Kategoriserer maden/retterne i de forskellige kategorier
-         const filter = kategori;
-        if (filter == ret.forretter) {
-        }
-        else if(filter == ret.hovedretter) {
-        }
-        else(filter == ret.desserter) {
-        }
-              //deffinerer informationerne fra restdb i de rigtige div'er
-            const klon = temp.cloneNode(true).content;
-            klon.querySelector("h2").textContent = ret.navn;
+      const main = document.querySelector("main");
+      const template = document.querySelector("template").content;
 
-            klon.querySelector("h3").textContent = "Pris: " + ret.pris + " kr.";
-            klon.querySelector("p").textContent = ret.kortbeskrivelse;
-
-            container.appendChild(klon);
-
-          });
-        }
-
-        hentdata();
+      function vis() {
+        console.log(retter);
+        main.innerHTML = "";
+        retter.forEach((ret) => {
+          if (filter == ret.kategori || filter == "alle") {
+            const klon = template.cloneNode(true);
+            klon.querySelector(".navn").textContent = ret.navn;
+            klon.querySelector(".pris").textContent = "Pris: " + ret.pris;
+            klon.querySelector("img").src = "faces/" + ret.billede;
+            klon.querySelector(".text").textContent = ret.kortbeskrivelse;
+            main.appendChild(klon);
+          }
+        });
+      }
     </script>
   </body>
 </html>
