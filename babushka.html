@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bistro Babushka</title>
+
+    <style>
+      section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      img {
+        max-width: 100%;
+      }
+      article {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="">Alle</a></li>
+          <li><a href="">Forretter</a></li>
+          <li><a href="">Hovedretter</a></li>
+          <li><a href="">Desserter</a></li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Bistro Babushka</h1>
+    <section>
+      <template>
+        <article>
+          <img src="" alt="" />
+          <h2></h2>
+          <h3></h3>
+
+          <p></p>
+        </article>
+      </template>
+    </section>
+    <script>
+        const container = document.querySelector("section");
+        const temp = document.querySelector("template");
+
+        const url = "https://babushka-dd8a.restdb.io/rest/menu";
+        const key = "600ec2fb1346a1524ff12de4";
+
+        let data = [];
+
+        const options = {
+          headers: {
+            "x-apikey": key,
+          },
+        };
+
+        document.addEventListener("DOMContentLoaded", start);
+
+      function start() {
+          async function hentdata() {
+          const respons = await fetch(url, options);
+          const json = await respons.json();
+          vis(json);
+          console.log("her er json");
+        }
+      }
+
+
+
+        function vis(menu) {
+          menu.forEach((ret) => {
+      //Kategoriserer maden/retterne i de forskellige kategorier
+         const filter = kategori;
+        if (filter == ret.forretter) {
+        }
+        else if(filter == ret.hovedretter) {
+        }
+        else(filter == ret.desserter) {
+        }
+              //deffinerer informationerne fra restdb i de rigtige div'er
+            const klon = temp.cloneNode(true).content;
+            klon.querySelector("h2").textContent = ret.navn;
+
+            klon.querySelector("h3").textContent = "Pris: " + ret.pris + " kr.";
+            klon.querySelector("p").textContent = ret.kortbeskrivelse;
+
+            container.appendChild(klon);
+
+          });
+        }
+
+        hentdata();
+    </script>
+  </body>
+</html>
