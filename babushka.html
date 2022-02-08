@@ -23,6 +23,23 @@
       .valgt {
         background-color: cyan;
       }
+      #modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        background-color: #00000055;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #modal article {
+        max-width: 700px;
+        margin: 2em, auto;
+        background-color: white;
+      }
     </style>
   </head>
   <body>
@@ -38,6 +55,16 @@
       <button data-kategori="sideorders">Sideorders</button>
       <button data-kategori="drikkevarer">Drikkevarer</button>
     </nav>
+    <!-- Pop up af mere info (ligger ikke main, fordi vi deffinerer main med innerHTML i function vis) -->
+    <aside id="modal">
+      <article>
+        <h2></h2>
+        <h3></h3>
+        <img src="" alt="" />
+        <p></p>
+        <p></p>
+      </article>
+    </aside>
     <main>
       <section>
         <template>
@@ -54,6 +81,7 @@
     <script>
       const header = document.querySelector("header h1");
       const container = document.querySelector("section");
+      const modal = document.querySelector("#modal");
       const temp = document.querySelector("template");
 
       const url = "https://babushka-dd8a.restdb.io/rest/menu";
@@ -106,12 +134,29 @@
             const klon = template.cloneNode(true);
             klon.querySelector(".navn").textContent = ret.navn;
             klon.querySelector(".pris").textContent = "Pris: " + ret.pris;
-            klon.querySelector("img").src = "faces/" + ret.billede;
+            klon.querySelector("img").src =
+              "medium/" + ret.billednavn + "-md.jpg";
             klon.querySelector(".text").textContent = ret.kortbeskrivelse;
+            //deffinerer pop up og tilføjer et click
+            klon
+              .querySelector("article")
+              .addEventListener("click", () => visDetaljer(ret));
+            //
             main.appendChild(klon);
           }
         });
       }
+      //funktion til popup og der deffineres hvad der skal stå i popup
+      function visDetaljer(ret) {
+        console.log(ret);
+        modal.querySelector("h2").textContent = ret.navn;
+        modal.querySelector("img").src = "medium/" + ret.billednavn + "-md.jpg";
+        klon.querySelector("p").textContent = ret.langbeskrivelse;
+        //får pop up til at komme frem
+        modal.style.display = "flex";
+      }
+      //function der får popup til at forsvinde igen
+      modal.addEventListener("click", () => (modal.style.display = "none"));
     </script>
   </body>
 </html>
