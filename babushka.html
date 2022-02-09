@@ -5,8 +5,69 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Persongalleri</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Coiny&family=Cormorant+Garamond:wght@300;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      h1 {
+        font-family: "Coiny", cursive;
+        text-align: center;
+        font-size: 3rem;
+        color: #25521b;
+      }
+      h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #25521b;
+      }
+      h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+
+      h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 400;
+        font-size: 1.5rem;
+      }
+      button {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 400;
+        font-size: 2rem;
+        color: #25521b;
+        background-color: transparent;
+        margin: 0.5rem;
+        border: none;
+      }
+      nav {
+        text-align: center;
+      }
+
+      button:hover {
+        color: #60f479;
+      }
+
+      .splash {
+        grid-column: 1/4;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: 50% 60%;
+
+        /* place-content: center; */
+
+        align-content: center;
+      }
+
       main {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -21,7 +82,7 @@
       }
 
       .valgt {
-        background-color: cyan;
+        color: red;
       }
       #modal {
         position: fixed;
@@ -43,6 +104,9 @@
     </style>
   </head>
   <body>
+    <section class="splash">
+      <img src="./splash-babushka.svg" alt="" />
+    </section>
     <header>
       <h1>Alle</h1>
     </header>
@@ -59,9 +123,10 @@
     <aside id="modal">
       <article>
         <h2></h2>
-        <h3></h3>
+        <h3 class="region"></h3>
         <img src="" alt="" />
-        <p></p>
+        <h3 class="pris2"></h3>
+        <p class="text2"></p>
         <p></p>
       </article>
     </aside>
@@ -133,7 +198,8 @@
           if (filter == ret.kategori || filter == "alle") {
             const klon = template.cloneNode(true);
             klon.querySelector(".navn").textContent = ret.navn;
-            klon.querySelector(".pris").textContent = "Pris: " + ret.pris;
+            klon.querySelector(".pris").textContent =
+              "Pris: " + ret.pris + " kr.";
             klon.querySelector("img").src =
               "medium/" + ret.billednavn + "-md.jpg";
             klon.querySelector(".text").textContent = ret.kortbeskrivelse;
@@ -151,7 +217,11 @@
         console.log(ret);
         modal.querySelector("h2").textContent = ret.navn;
         modal.querySelector("img").src = "medium/" + ret.billednavn + "-md.jpg";
-        klon.querySelector("p").textContent = ret.langbeskrivelse;
+        modal.querySelector(".pris2").textContent =
+          "Pris: " + ret.pris + " kr.";
+        modal.querySelector(".region").textContent =
+          "Oprindelsesregion: " + ret.oprindelsesregion;
+        modal.querySelector(".text2").textContent = ret.langbeskrivelse;
         //får pop up til at komme frem
         modal.style.display = "flex";
       }
